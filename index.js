@@ -65,12 +65,31 @@ async function askAI(question) {
     throw "AI API key not configured";
   }
 
-  const url =
-  `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-  const response = await axios.post(url, {
-    contents: [{ parts: [{ text: question }] }]
-  });
+  const response = await axios.post(
+    url,
+    {
+      contents: [
+        {
+          parts: [{ text: question }]
+        }
+      ]
+    },
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  if (
+    !response.data ||
+    !response.data.candidates ||
+    response.data.candidates.length === 0
+  ) {
+    throw "AI response empty";
+  }
 
   return response.data.candidates[0].content.parts[0].text
     .trim()
