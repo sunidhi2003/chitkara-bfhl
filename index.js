@@ -66,7 +66,7 @@ async function askAI(question) {
   }
 
   const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+  `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   const response = await axios.post(url, {
     contents: [{ parts: [{ text: question }] }]
