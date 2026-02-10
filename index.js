@@ -65,8 +65,8 @@ async function askAI(question) {
     throw "AI API key not configured";
   }
 
+  // CORRECT URL: This is the specific address Google needs
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
 
   const response = await axios.post(
     url,
@@ -84,17 +84,18 @@ async function askAI(question) {
     }
   );
 
+  // Updated response path to match Google's structure
   if (
-    !response.data ||
-    !response.data.candidates ||
-    response.data.candidates.length === 0
+    response.data &&
+    response.data.candidates &&
+    response.data.candidates.length > 0
   ) {
-    throw "AI response empty";
+    return response.data.candidates[0].content.parts[0].text
+      .trim()
+      .split(" ")[0];
   }
-
-  return response.data.candidates[0].content.parts[0].text
-    .trim()
-    .split(" ")[0];
+  
+  throw "AI response empty";
 }
 
 /* ---------------- POST /bfhl ---------------- */
